@@ -19,7 +19,6 @@ class TrendStreamListener(StreamListener):
 
 
 
-
 if __name__ == "__main__":
     streamListener = TrendStreamListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
