@@ -1,6 +1,7 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+from TrendLoader import TrendLoader
 import time
 import sys
 
@@ -19,12 +20,12 @@ class TrendStreamListener(StreamListener):
         print(status_code)
 
 
-
 if __name__ == "__main__":
     streamListener = TrendStreamListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token,access_token_secret)
     stream = Stream(auth, streamListener)
+    trendLoader = TrendLoader()
     sysBackup = sys.stdout
     startTime = time.time()
     f = open('python.txt','w')
