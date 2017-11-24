@@ -1,7 +1,8 @@
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-
+import time
+import sys
 
 access_token = "762889126840377344-QokfOoxEdg30hhdhDrpTXSPZ1Xn3wlO"
 access_token_secret = "Et0fFXrxcj3trVvvXKGbxDsqc9Ex6Wib6isIjJkgb61os"
@@ -24,7 +25,18 @@ if __name__ == "__main__":
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token,access_token_secret)
     stream = Stream(auth, streamListener)
+    sysBackup = sys.stdout
+    startTime = time.time()
+    f = open('python.txt','w')
     stream.filter(track=['python'], async=True)
+    sys.stdout = f
+    while True:
+        endTime = time.time()
+        if endTime - startTime > 60:
+            break
+    stream.disconnect()
+    f.close()
+    sys.stdout = sysBackup
 
 
 
