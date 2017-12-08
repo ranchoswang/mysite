@@ -16,7 +16,7 @@ def print_raw():
         length = len(lines)
         for i in range(length):
             print(lines[i])
-            time.sleep(10)
+            #time.sleep(1)
 
 class SocketServer():
 
@@ -32,17 +32,19 @@ class SocketServer():
     def start_on(self):
         self.server.listen(5)
         print('Listening...')
-        tcpClientSock, addr = self.server.accept()
-        print("Connection accepted.")
-        try:
-            self.sysBackup = sys.stdout
-            sys.stdout = self.server.makefile('w')
-            print_raw()
-        except:
-            tcpClientSock.close()
+        self.tcpClientSock, addr = self.server.accept()
+        print('Connection accepted. Writing data...')
+        self.sysBackup = sys.stdout
+        sys.stdout = self.tcpClientSock.makefile('w')
+        print_raw()
+
+    def close_off(self):
+        self.tcpClientSock.close()
         sys.stdout = self.sysBackup
+        print('Connection closed.')
 
 
 if __name__ == "__main__":
     TcpServer = SocketServer()
     TcpServer.start_on()
+    TcpServer.close_off()

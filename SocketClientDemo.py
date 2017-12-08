@@ -27,18 +27,25 @@ class TcpClient():
             os._exit(1)
 
     def start_on(self):
-        self.sysBackup = sys.stdout
-        sys.stdout = self.client.makefile('w')
-        print_raw()
+        while True:
+            try:
+                data = self.client.recv(BUFSIZ)
+                print(data)
+            except:
+                self.client.close()
+                break
+            if not data:
+                break
 
     def disconnect(self):
         self.client.close()
-        sys.stdout = self.sysBackup
+
 
 
 class  TcpServer():
     def __init__(self):
         self.server = socket()
+        self.sysBackup = sys.stdout
         try:
             self.server.bind(ADDR)
         except OSError as e:
@@ -49,19 +56,15 @@ class  TcpServer():
     def start_on(self):
         self.server.listen(5)
         print('Listening...')
-        tcpClientSock, addr = self.server.accept()
-        while True:
-            try:
-                data = tcpClientSock.recv(BUFSIZ)
-                print(data)
-            except:
-                tcpClientSock.close()
-                break
-            if not data:
-                break
+        tcpServerSock, addr = self.server.accept()
+        print('Connected. Writing data...')
+        self.sysBackup = sys.stdout
+        sys.stdout = tcpServerSock.makefile('w')
+        print_raw()
 
     def disconnect(self):
         self.server.close()
+        sys.stdout = self.sysBackup
 
 
 if __name__ == "__main__":
