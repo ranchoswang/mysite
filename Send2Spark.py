@@ -16,7 +16,7 @@ def print_raw():
         length = len(lines)
         for i in range(length):
             print(lines[i])
-            #time.sleep(1)
+            time.sleep(1)
 
 class SocketServer():
 
